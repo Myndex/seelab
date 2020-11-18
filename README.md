@@ -20,8 +20,11 @@ Send a color string to RGBcolor for parsing, then:
 
 `myColor.hex()` is a hex string of the RGB or RGBA (auto detects if alpha is present)
 
-`myColor.CIE()` returns an array with CIE spaces XYZ, xyY, LAB, LCh, etc.
+`myColor.CIE()` returns an array with CIE spaces XYZ, xyY, LAB, LCh, etc. (has provision to select any combination or all spaces)
 
+And many many more. 
+
+Section switches are included to turn on or off only the function groups you need before minimizing. Most of the switches include a boolean to tall dependant sections if they are on or off. 
 
 Copyright © 2019-2020 by Andrew Somers. All Rights Reserved.
 LICENSE: GNU AGPL v3  https://www.gnu.org/licenses/
