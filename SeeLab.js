@@ -19,11 +19,10 @@
 
 // ==ClosureCompiler==
 // @compilation_level SIMPLE_OPTIMIZATIONS
-// @output_file_name SAPCsRGB.98.min.js
-// @code_url https://www.myndex.com/SAPC/JS/SAPCsRGB.98.js
+// @output_file_name SeeLab.min.js
+// @code_url <insert URL here> /JS/SeeLab.js
 // ==/ClosureCompiler==
-// https://closure-compiler.appspot.com/home#code%3D%252F%252F%2520%253D%253DClosureCompiler%253D%253D%250A%252F%252F%2520%2540compilation_level%2520SIMPLE_OPTIMIZATIONS%250A%252F%252F%2520%2540output_file_name%2520SAPCsRGB.98.min.js%250A%252F%252F%2520%2540code_url%2520https%253A%252F%252Fwww.myndex.com%252FSAPC%252FJS%252FSAPCsRGB.98.js%250A%252F%252F%2520%253D%253D%252FClosureCompiler%253D%253D%250A
-
+// https://closure-compiler.appspot.com/
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
