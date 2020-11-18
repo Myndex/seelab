@@ -288,18 +288,32 @@ this.cleaned = colorString = colorString.toLowerCase();   // set lowercase
 
 // Some basic sRGB constants:
 
-    const sRGBtrc = 2.218; //2.218;
+    const sRGBtrc = 2.218; // 2.218 or 2.2 or 2.2223 etc.
         // Transfer Curve (aka "Gamma") for sRGB linearization.
         // 2.218 sets unity with the piecewise sRGB at #777
-        // Simple power curve vs piecewise described in docs
+        // however "2.2" is more common, though some use 2.2223
+        // Simple power curve vs piecewise depends on application
+        // for image processing where round-trip accuracy is 
+        // important, use piecewise. For estimating the 
+        // display output, use the simple exponent that best
+        // represents the display.
 
-    const sRGBtrcEncode = 1.0 / sRGBtrc;
+    const sRGBtrcEncode = 1.0 / sRGBtrc; // inverse of above for encoding
     
     const Rco = 0.2126;       // sRGB Red Coefficient (IEC standard)
     const Gco = 0.7152;       // sRGB Green Coefficient (IEC standard)
     const Bco = 0.0722;       // sRGB Blue Coefficient (IEC standard)
+                              // FYI: XYZ matrix in CIE() has higher accuracy.
+
+    
+    const normBGExp = 0.38;   // Constants for SAPC/APCA Power Curve Exponents.
+    const normTXTExp = 0.43;  // One pair for normal text, and one for REVERSE
+    const revBGExp = 0.5;     // Useful for modeling perceptual contrast
+    const revTXTExp = 0.43;
+
 
 // certain common getters are available as properties in addition to methods
+// in most cases the property versions have a "P" appended to the name.
 
     // hex — returns plain 6 or 8 char hex string no hash #
     
@@ -530,7 +544,7 @@ this.cleaned = colorString = colorString.toLowerCase();   // set lowercase
 //////////////////////////////////////////
 //* SECTION SWITCH  (remove/add first slash to toggle: /* off   //* on )
 
-// this.linearized functions
+// this.linearized function expressions
 // Note with all of these the exponent can be given in parameter
 
     sRGBsimpleExpFunctions = true; // reports if properties are available
@@ -561,7 +575,7 @@ this.cleaned = colorString = colorString.toLowerCase();   // set lowercase
         return  100 * this.LY(exp);
     }
 
-    // LY100str — This returns linear Y  with Precision and Str trim
+    // LY100str — This returns linear Y  with Precision and Str trim hack
     this.LY100str = function (places = 4) {
         return this.LY100().toPrecision(places).substr(0,places + 4);
     }
@@ -817,7 +831,9 @@ this.cleaned = colorString = colorString.toLowerCase();   // set lowercase
 //  Second parameter determines the color source and linearization type.
 //
 //  Default (case 0 or 'piecewise') is this.r.g.b using sRGB piecewise
-//  (case 1 or 'simpleExp') is this.r.g.b using sRGBtrc exponent
+//  (case 1 or 'simpleExp') is this.r .g .b using sRGBtrc exponent
+//         case 1 simpleExp also allows sending a custom exponent
+//         in the 6th parameter, defaults to sRGBtrc
 //  (case 2 or 'int') is 8bit int sent to param 3,4,5 using sRGB piecewise
 //  (case 3 or 'intExp') is 8bit int sent to param 3,4,5 using sRGBtrc exponent
 //  (case 4 or 'float') for already linearized decimal sent to param 3,4,5 
@@ -860,7 +876,7 @@ this.cleaned = colorString = colorString.toLowerCase();   // set lowercase
 
 this.CIE = function processCIE(spaces = 0b1111,
                                 using = 'piecewise',
-                                Rin, Gin, Bin) {
+                                Rin, Gin, Bin, exp = sRGBtrc) {
                                 // Input params are optional, defaults to this.
         // linearize sRGB  
     switch (using) {
@@ -878,14 +894,14 @@ this.CIE = function processCIE(spaces = 0b1111,
             break; 
         case 1:
         case 'simpleExp':
-            if (sRGBsimpleExpProperties) {
+            if (sRGBsimpleExpProperties && exp == sRGBtrc) {
                 Rlin = this.RlinP;
                 Glin = this.GlinP;
                 Blin = this.BlinP;
             } else {
-                Rlin = this.Rlin();
-                Glin = this.Glin();
-                Blin = this.Blin();
+                Rlin = this.Rlin(exp);
+                Glin = this.Glin(exp);
+                Blin = this.Blin(exp);
             }
             break; 
         case 2:
