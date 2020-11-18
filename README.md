@@ -1,6 +1,6 @@
 # SeeLab
 
-### SeeLab - Processing for CIE spacess from sRGB - Beta 0.98
+### SeeLab - Processing for CIE spaces, parsing sRGB, and more - Beta 0.98
 
 This object and methods parse sRGB color values, provide returns as strings, arrays, or numeric values, and process color data into and out of CIE standard spaces XYZ, xyY, LAB, LUV, LChab, LChuv, and a few other nifty things.
 
