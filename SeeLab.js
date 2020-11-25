@@ -790,10 +790,11 @@ this.cleaned = colorString = colorString.toLowerCase();   // set lowercase
             Math.pow(XYZ, cubeRoot) : ((XYZ * CIEk + 16.0) * CIE116div);
     }
     
-    function processLCh(au,bv) {
-        // This is for the CIE function, sent either LAB or LUV to create LCh
+              // This is for the CIE function to create polar coordinates
+              // Send either ab of LAB or or uv of LUV, to create LCh    
+    function processLCh(au = 0.0, bv = 0.0) {
             var Cabuv = Math.pow(au * au + bv * bv, 0.5);
-                // if Cabuv less than 0.1, set hue to 360, NaN, or 0
+                // if Cabuv less than 0.01, set hue to 360, NaN, or 0
             var habuv = (Cabuv < 0.01) ? 0.0 : 180.0 * Math.atan2(bv,au) * piDiv;
                 habuv = (habuv < 0.0) ? habuv + 360.0 : habuv;
         return [Cabuv,habuv];
@@ -1048,10 +1049,9 @@ if ((spaces & 0b0111) != 0){
 ////////////////////////////////////////////////////////////////////////////////
 
 
-        // converts LCh back to LAB or LUV cartesian coordinates
-        // No checking so it is important to keep track of if LAB or LUV
-    function LChToCartesian(Cabuv, habuv) {
-        Cabuv = ( Cabuv > 0.01 ) ? Cabuv : 0.0; // effectively clamps noise to 0
+        // converts LCh back to LAB ab or LUV uv cartesian coordinates
+    function LChToCartesian(Cabuv = 0.0, habuv = 0.0) {
+        Cabuv = ( Cabuv > 0.01 ) ? Cabuv : 0.0; // Effectively clamps ab or uv to 0 for plain grey.
         var au = Cabuv * Math.cos(habuv * pi180);
         var bv = Cabuv * Math.sin(habuv * pi180);
         return [au, bv];
